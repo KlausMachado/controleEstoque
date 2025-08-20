@@ -10,7 +10,7 @@ app.get('/api/health', (req, res) => {
     res.json({ok : true, timestamp: Date().toString()});
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
     console.log(`API is running on  http://localhost:${PORT}`);
 });
