@@ -35,20 +35,32 @@ app.post('/api/users', (req, res) => {
 app.put('/api/users/:id', (req, res) => {
     // console.log("chegou aqui no PUT do server")
     // console.log(req.params);
-    const { id } = req.params;
-    const { name, email } = req.body;
-    const user = users.find(user => user.id == id);
+    const { id } = req.params;  //pega o id da url
+    const { name, email } = req.body; 
+    const user = users.find(user => user.id == id); //encontra o usuario pelo id
 
+    //se não encontrar o usuario, retorna erro 404 se encontrar, atualiza o nome e email se fornecidos
     if (!user) {
         return res.status(404).json({ error: 'Usuario não encontrado' });
     }
-    if (name) {
+    if (name) { 
         user.name = name;
     }
     if (email) {
         user.email = email;
     }
-    res.json(user)
+    res.json(user) //retorna o usuario atualizado
+});
+
+//delete user
+app.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const userIndex = users.findIndex(user => user.id == id); 
+    if (userIndex === -1) {
+        return res.status(404).json({ error: 'Usuario não encontrado' });
+    }
+    const deletedUser = users.splice(userIndex, 1); //remove o usuario do array
+    res.json(deletedUser[0]); //retorna o usuario deletado
 });
 
 const PORT = process.env.PORT || 3333;
