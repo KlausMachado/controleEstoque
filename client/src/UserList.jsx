@@ -34,7 +34,7 @@ export default function UserList() {
             })
                 .then(response => response.json())
                 .then(updatedUser => {
-                    setUsers(users.map(user => user.id === updatedUser.id ? updatedUser : user))
+                    setUsers(currentUsers => currentUsers.map(user => user.id === updatedUser.id ? updatedUser : user))
                     setName('')
                     setEmail('')
                     setEditingUserId(null) //limpa o id do usuário sendo editado
@@ -52,7 +52,7 @@ export default function UserList() {
                 }
                 )
                 .then(newUser => {
-                    setUsers([...users, newUser]) //mantem a lista atual e adiciona o novo usuário
+                    setUsers(currentUsers => [...currentUsers, newUser]) //mantem a lista atual e adiciona o novo usuário
                     setName('')
                     setEmail('')
                 }
