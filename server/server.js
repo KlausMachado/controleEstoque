@@ -8,7 +8,7 @@ app.use(express.json());
 
 let users = [
     { id: 1, name: 'Alice', email: 'alice@email.com' },
-    { id: 2, name: 'Bob', email: 'bob@email.com'},
+    { id: 2, name: 'Bob', email: 'bob@email.com' },
 ];
 
 //list all users
