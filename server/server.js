@@ -59,7 +59,7 @@ app.delete('/api/users/:id', (req, res) => {
     if (userIndex === -1) {
         return res.status(404).json({ error: 'Usuario não encontrado' });
     }
-    const deletedUser = users.splice(userIndex, 1); //remove o usuario do array
+    const deletedUser = users.splice(userIndex, 1); //remove o usuario do array - Splice(onde começa, quantos remover)
     res.json(deletedUser[0]); //retorna o usuario deletado
 });
 

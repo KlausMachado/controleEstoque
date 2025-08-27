@@ -38,6 +38,9 @@ export default function UserList() {
                     setEmail('')
                     setEditingUserId(null) //limpa o id do usuário sendo editado
                 })
+                .catch(err => {
+                    console.error("Erro ao deletar usuário:", err)
+                })
         } else { //se estiver criando um novo usuário
             fetch('/api/users', {
                 method: 'POST',
@@ -56,6 +59,9 @@ export default function UserList() {
                     setEmail('')
                 }
                 )
+                .catch(err => {
+                    console.error("Erro ao adicionar usuário:", err)
+                })
         }
 
     }
@@ -68,7 +74,7 @@ export default function UserList() {
 
     //deletar usuário
     function handleDelete(userId) {
-        fetch(`/api/users/${userId}`, {
+        fetch(`/api/users/${userId}`, { //chama o backend para deletar o usuário
             method: 'DELETE'
         })
             .then(response => response.json())
@@ -97,8 +103,9 @@ export default function UserList() {
             <h2>Lista de Usuários: </h2>
             <ul>
                 {users.map(user => (
-                    <li key={user.id}>{user.name} - ({user.email})
+                    <li key={user.id}> {user.name} - ({user.email})
                         <button onClick={() => handleEdit(user)}>Edit</button>
+                        <button onClick={() => handleDelete(user.id)}>Delete</button>
                     </li>
                 ))}
             </ul>
