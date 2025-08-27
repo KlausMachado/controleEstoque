@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const e = require('express');
 
 const app = express();
 
@@ -42,6 +43,10 @@ app.put('/api/users/:id', (req, res) => {
     //se não encontrar o usuario, retorna erro 404 se encontrar, atualiza o nome e email se fornecidos
     if (!user) {
         return res.status(404).json({ error: 'Usuario não encontrado' });
+    } else if (!name){
+        return res.status(400).json({ error: 'Nome é obrigatorio' });
+    } else if (!email) {
+        return res.status(400).json({ error: 'Email é obrigatorio' });
     }
     if (name) { 
         user.name = name;
