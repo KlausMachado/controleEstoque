@@ -6,19 +6,27 @@ export default function UserList() {
     const [email, setEmail] = useState('') //estado inicial (vazio) do campo email do formulário | setEmail é a função para atualizar o estado do email
     const [editingUserId, setEditingUserId] = useState(null) //estado para armazenar o id do usuário sendo editado, null se não estiver editando
     const [error, setError] = useState(null) //estado para armazenar mensagens de erro
+    const [success, setSuccess] = useState(null) //estado para armazenar mensagens de sucesso
+    const [loading, setLoading] = useState(false) //estado para indicar se uma requisição está em andamento
 
     //busca a lista de usuários ao carregar o componente - dispara o GET '/api/users' do backend 
     useEffect(() => {
         fetch('/api/users')
             .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar usuários')
+                }
                 return response.json()
             })
             .then(data => {
-                return setUsers(data) //atualiza o estado com a lista de usuários vinda do backend
+                setUsers(data) //atualiza o estado com a lista de usuários vinda do backend
+                setError(null)
             })
             .catch(err => {
                 console.error("Erro ao buscar usuários:", err)
+                setError('Erro ao carregar usuários') //define a mensagem de erro no estado
             })
+            .finally(() => setLoading(false)) //indica que a requisição terminou
     }, [])
 
     //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
@@ -44,14 +52,16 @@ export default function UserList() {
                     setUsers(currentUsers => currentUsers.map(user => user.id === updatedUser.id ? updatedUser : user)) //atualiza a lista de usuários com o usuário editado. currentUsers é o estado atual da lista de usuários | user é cada usuário na lista | se o id do usuário atual for igual ao id do usuário editado, substitui pelo usuário editado, senão mantém o usuário atual
                     setName('')
                     setEmail('')
-                    setError('')
+                    setError(null)
                     setEditingUserId(null) //limpa o id do usuário sendo editado
+                    setSuccess('Usuário editado com sucesso!')
                 })
                 .catch(err => {
                     setError(err.message)
                     setName('')
                     setEmail('')
                 })
+                .finally(() => setLoading(false))
         } else { //se estiver criando um novo usuário
             fetch('/api/users', {
                 method: 'POST',
@@ -72,7 +82,8 @@ export default function UserList() {
                     setUsers(currentUsers => [...currentUsers, newUser]) //mantem a lista atual e adiciona o novo usuário
                     setName('')
                     setEmail('')
-                    setError('') //limpa a mensagem de erro, se houver
+                    setError(null) //limpa a mensagem de erro, se houver
+                    setSuccess('Usuário adicionado com sucesso!') //define a mensagem de sucesso
                 }
                 )
                 .catch(err => {
@@ -80,6 +91,7 @@ export default function UserList() {
                     setName('')
                     setEmail('')
                 })
+                .finally(() => setLoading(false))
         }
 
     }
@@ -104,11 +116,13 @@ export default function UserList() {
             })
             .then(() => {
                 setUsers(currentUsers => currentUsers.filter(user => user.id !== userId)) //remove o usuário deletado da lista local sem precisar recarregar a lista do backend
-                setError('')
+                setError(null)
+                setSuccess('Usuário deletado com sucesso!')
             })
             .catch(err => {
                 setError(err.message)
             })
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -125,7 +139,9 @@ export default function UserList() {
                     onChange={e => setEmail(e.target.value)} />
                 <button type="submit">{editingUserId ? "Update User" : "Add User"}</button>
             </form>
+            {loading && <p style={{color: 'yellow'}}>Carregando usuários...</p>} {/*se estiver carregando, exibe a mensagem*/}
             {error && <p style={{ color: 'red' }}>{error}</p>} {/*se houver uma mensagem de erro, exibe abaixo do formulário*/}
+            {success && <p style={{ color: 'green' }}>{success}</p>} {/*se houver uma mensagem de sucesso, exibe abaixo do formulário*/}                
             <h2>Lista de Usuários: </h2>
             <ul>
                 {users.map(user => (
