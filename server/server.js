@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); //permite a comunicação entre back e front
 const e = require('express');
 
 const app = express();
@@ -14,14 +14,11 @@ let users = [
 
 //list all users
 app.get('/api/users', (req, res) => {
-    // console.log("chegou aqui no GET do server");
     res.json(users);
 });
 
 //create new user
 app.post('/api/users', (req, res) => {
-    // console.log("chegou aqui no POST do server");
-
     const { name, email } = req.body;
     if (!name || !email) {
         return res.status(400).json({ error: 'Nome e email são obrigatorios' });
@@ -33,8 +30,6 @@ app.post('/api/users', (req, res) => {
 
 //update user
 app.put('/api/users/:id', (req, res) => {
-    // console.log("chegou aqui no PUT do server")
-    // console.log(req.params);
     const { id } = req.params;  //pega o id da url
     const { name, email } = req.body; 
     const user = users.find(user => user.id == id); //encontra o usuario pelo id

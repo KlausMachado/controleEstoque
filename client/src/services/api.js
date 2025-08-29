@@ -7,6 +7,7 @@ async function handleResponse(response) {
     return response.json() //se a resposta for ok, retorna a responsta em formato JSON
 }
 
+//centralizando a comunicação com o back/ realiza todas as requisições
 export function getUsers() {
     return fetch('/api/users')
         .then(handleResponse)
