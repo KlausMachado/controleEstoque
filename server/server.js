@@ -15,7 +15,6 @@ let users = [
 //list all users
 app.get('/api/users', (req, res) => {
     // console.log("chegou aqui no GET do server");
-
     res.json(users);
 });
 

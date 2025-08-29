@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UserForm from "./UserForm";
+import { getUsers, updateUser, createUser, deleteUser } from "./services/api";
 
 export default function UserList() {
     const [users, setUsers] = useState([]) //renderiza a lista de usuários vazia inicialmente | setUsers é a função para atualizar o estado da lista de usuários
@@ -13,20 +14,13 @@ export default function UserList() {
     //busca a lista de usuários ao carregar o componente - dispara o GET '/api/users' do backend 
     useEffect(() => {
         setLoading(true)
-        fetch('/api/users')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao buscar usuários')
-                }
-                return response.json()
-            })
+        getUsers()
             .then(data => {
                 setUsers(data) //atualiza o estado com a lista de usuários vinda do backend
                 setError(null)
             })
             .catch(err => {
-                console.error("Erro ao buscar usuários:", err)
-                setError('Erro ao carregar usuários') //define a mensagem de erro no estado
+                setError(err.message) //define a mensagem de erro no estado
             })
             .finally(() => setLoading(false)) //indica que a requisição terminou
     }, [])
@@ -36,21 +30,7 @@ export default function UserList() {
         e.preventDefault()
         if (editingUserId) { //se estiver editando um usuário
             setLoading(true)
-            fetch(`/api/users/${editingUserId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, email })
-            })
-                .then(async response => {
-                    if (!response.ok) {
-                        setEditingUserId(null)
-                        const errorData = await response.json()
-                        throw new Error(errorData.error || 'Erro ao editar usuário')
-                    }
-                    return response.json()
-                })
+            updateUser(editingUserId, { name, email })
                 .then(updatedUser => {
                     setUsers(currentUsers => currentUsers.map(user => user.id === updatedUser.id ? updatedUser : user)) //atualiza a lista de usuários com o usuário editado. currentUsers é o estado atual da lista de usuários | user é cada usuário na lista | se o id do usuário atual for igual ao id do usuário editado, substitui pelo usuário editado, senão mantém o usuário atual
                     setName('')
@@ -67,21 +47,7 @@ export default function UserList() {
                 .finally(() => setLoading(false))
         } else { //se estiver criando um novo usuário
             setLoading(true)
-            fetch('/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, email })
-            })
-                .then(async response => {
-                    if (!response.ok) {
-                        //se a resposta não for ok, lança um erro com a mensagem vinda do backend
-                        const errorData = await response.json()
-                        throw new Error(errorData.error || 'Erro ao adicionar usuário')
-                    }
-                    return response.json() //se a resposta for ok, retorna o usuário criado
-                })
+            createUser({ name, email })
                 .then(newUser => {
                     setUsers(currentUsers => [...currentUsers, newUser]) //mantem a lista atual e adiciona o novo usuário
                     setName('')
@@ -109,16 +75,7 @@ export default function UserList() {
     //deletar usuário
     function handleDelete(userId) {
         setLoading(true)
-        fetch(`/api/users/${userId}`, { //chama o backend para deletar o usuário
-            method: 'DELETE'
-        })
-            .then(async response => {
-                if (!response.ok) {
-                    const errorData = await response.json()
-                    throw new Error(errorData.error || 'Erro ao deletar usuário')
-                }
-                return response.json()
-            })
+        deleteUser(userId)
             .then(() => {
                 setUsers(currentUsers => currentUsers.filter(user => user.id !== userId)) //remove o usuário deletado da lista local sem precisar recarregar a lista do backend
                 setError(null)
@@ -133,7 +90,7 @@ export default function UserList() {
     return (
         <div style={{ marginTop: 24 }}>
             <h2>Users</h2>
-            
+
             <UserForm //passando os valores das props que serão usadas em UserForm
                 name={name}
                 email={email}
@@ -142,7 +99,7 @@ export default function UserList() {
                 onChangeName={setName}
                 onChangeEmail={setEmail}
                 onSubmit={handleSubmit}
-                onCancel={()=>{
+                onCancel={() => {
                     setEditingUserId(null)
                     setName('')
                     setEmail('')
