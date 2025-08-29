@@ -15,7 +15,7 @@ export default function UserList() {
     useEffect(() => {
         setLoading(true)
         getUsers()
-            .then(data => {
+            .then(data => { //.then() funciona como uma ponte que transporta o resultado da requisição para o seu código, ele passa o resultado para a callback por isso data tem o conteudo de users 
                 setUsers(data) //atualiza o estado com a lista de usuários vinda do backend
                 setError(null)
             })
