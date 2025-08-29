@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import UserForm from "./UserForm";
 
 export default function UserList() {
     const [users, setUsers] = useState([]) //renderiza a lista de usuários vazia inicialmente | setUsers é a função para atualizar o estado da lista de usuários
@@ -11,6 +12,7 @@ export default function UserList() {
 
     //busca a lista de usuários ao carregar o componente - dispara o GET '/api/users' do backend 
     useEffect(() => {
+        setLoading(true)
         fetch('/api/users')
             .then(response => {
                 if (!response.ok) {
@@ -33,6 +35,7 @@ export default function UserList() {
     function handleSubmit(e) {
         e.preventDefault()
         if (editingUserId) { //se estiver editando um usuário
+            setLoading(true)
             fetch(`/api/users/${editingUserId}`, {
                 method: 'PUT',
                 headers: {
@@ -63,6 +66,7 @@ export default function UserList() {
                 })
                 .finally(() => setLoading(false))
         } else { //se estiver criando um novo usuário
+            setLoading(true)
             fetch('/api/users', {
                 method: 'POST',
                 headers: {
@@ -104,6 +108,7 @@ export default function UserList() {
 
     //deletar usuário
     function handleDelete(userId) {
+        setLoading(true)
         fetch(`/api/users/${userId}`, { //chama o backend para deletar o usuário
             method: 'DELETE'
         })
@@ -128,20 +133,27 @@ export default function UserList() {
     return (
         <div style={{ marginTop: 24 }}>
             <h2>Users</h2>
-            <form onSubmit={handleSubmit} style={{ marginBottom: 16 }}>
-                <input
-                    placeholder="Name"
-                    value={name}
-                    onChange={e => setName(e.target.value)} />
-                <input
-                    placeholder="Email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)} />
-                <button type="submit">{editingUserId ? "Update User" : "Add User"}</button>
-            </form>
-            {loading && <p style={{color: 'yellow'}}>Carregando usuários...</p>} {/*se estiver carregando, exibe a mensagem*/}
+            
+            <UserForm //passando os valores das props que serão usadas em UserForm
+                name={name}
+                email={email}
+                editingUserId={editingUserId}
+                loading={loading}
+                onChangeName={setName}
+                onChangeEmail={setEmail}
+                onSubmit={handleSubmit}
+                onCancel={()=>{
+                    setEditingUserId(null)
+                    setName('')
+                    setEmail('')
+                    setError(null)
+                    setSuccess(null)
+                }}
+            />
+
+            {loading && <p style={{ color: 'yellow' }}>Carregando ...</p>} {/*se estiver carregando, exibe a mensagem*/}
             {error && <p style={{ color: 'red' }}>{error}</p>} {/*se houver uma mensagem de erro, exibe abaixo do formulário*/}
-            {success && <p style={{ color: 'green' }}>{success}</p>} {/*se houver uma mensagem de sucesso, exibe abaixo do formulário*/}                
+            {success && <p style={{ color: 'green' }}>{success}</p>} {/*se houver uma mensagem de sucesso, exibe abaixo do formulário*/}
             <h2>Lista de Usuários: </h2>
             <ul>
                 {users.map(user => (
