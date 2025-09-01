@@ -7,59 +7,56 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let users = [
-    { id: 1, name: 'Alice', email: 'alice@email.com' },
-    { id: 2, name: 'Bob', email: 'bob@email.com' },
+let fornecedores = [
+    { id: 1, name: 'Alice', cnpj: '00.000.000/0000-00', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', telefone: '(00)00000-0000', email: 'alice@email.com', nomeContatoPrincipal: 'Alice' },
+    { id: 2, name: 'Bob', cnpj: '00.000.000/0000-00', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', telefone: '(00)00000-0000', email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
 ];
 
-//list all users
-app.get('/api/users', (req, res) => {
-    res.json(users);
+//list all fornecedores
+app.get('/api/fornecedores', (req, res) => {
+    res.json(fornecedores);
 });
 
-//create new user
-app.post('/api/users', (req, res) => {
+//create new fornecedor
+app.post('/api/fornecedores', (req, res) => {
     const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json({ error: 'Nome e email são obrigatorios' });
+    if (!name || !cnpj || telefone || !endereco || !email || !nomeContatoPrincipal) {
+        return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
     }
-    const newUser = { id: users.length + 1, name, email };
-    users.push(newUser);
-    res.status(201).json(newUser);
+    const newFornecedor = { id: fornecedor.length + 1, name, cnpj, telefone, endereço, email, nomeContatoPrincipal };
+    fornecedores.push(newFornecedor);
+    res.status(201).json(newFornecedor);
 });
 
-//update user
-app.put('/api/users/:id', (req, res) => {
-    const { id } = req.params;  //pega o id da url
-    const { name, email } = req.body; 
-    const user = users.find(user => user.id == id); //encontra o usuario pelo id
+//update fornecedor
+app.put('/api/fornecedores/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, cnpj, endereco, telefone, email, nomeContatoPrincipal } = req.body;
+    const fornecedor = fornecedores.find(fornecedor => fornecedor.id == id);
 
-    //se não encontrar o usuario, retorna erro 404 se encontrar, atualiza o nome e email se fornecidos
-    if (!user) {
-        return res.status(404).json({ error: 'Usuario não encontrado' });
-    } else if (!name){
+
+    if (!fornecedor) {
+        return res.status(404).json({ error: 'Fonecedor não encontrado' });
+    } else if (!name) {
         return res.status(400).json({ error: 'Nome é obrigatorio' });
     } else if (!email) {
         return res.status(400).json({ error: 'Email é obrigatorio' });
     }
-    if (name) { 
-        user.name = name;
-    }
-    if (email) {
-        user.email = email;
-    }
-    res.json(user) //retorna o usuario atualizado
-});
+    if (name) { fornecedor.name = name }
+    if (cnpj) { fornecedor.cnpj = cnpj }
+    if (email) { fornecedor.email = email; }
+    res.json(fornecedor)
+})
 
-//delete user
-app.delete('/api/users/:id', (req, res) => {
+//delete fornecedor
+app.delete('/api/fornecedores/:id', (req, res) => {
     const { id } = req.params;
-    const userIndex = users.findIndex(user => user.id == id); 
-    if (userIndex === -1) {
-        return res.status(404).json({ error: 'Usuario não encontrado' });
+    const fornecedorIndex = fornecedores.findIndex(fornecedor => fornecedor.id == id);
+    if (fornecedorIndex === -1) {
+        return res.status(404).json({ error: 'Fornecedor não encontrado' });
     }
-    const deletedUser = users.splice(userIndex, 1); //remove o usuario do array - Splice(onde começa, quantos remover)
-    res.json(deletedUser[0]); //retorna o usuario deletado
+    const deletedFornecedor = fornecedor.splice(fornecedorIndex, 1);
+    res.json(deletedFornecedor[0]);
 });
 
 const PORT = process.env.PORT || 3333;
