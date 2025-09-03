@@ -5,28 +5,28 @@ export default function UserForm({ nome, cnpj, telefone, endereco, email, nomeCo
             <input
                 placeholder="Nome"
                 value={nome}
-                onChange={e => onChangeName(e.target.value)} 
+                onChange={e => onChangeName(e.target.value)}
                 disabled={loading}
                 required
             />
             <input
                 placeholder="CNPJ"
                 value={cnpj}
-                onChange={e => onChangeCnpj(e.target.value)} 
+                onChange={e => onChangeCnpj(e.target.value)}
                 disabled={loading}
                 required
             />
             <input
                 placeholder="Telefone"
                 value={telefone}
-                onChange={e => onChangeTelefone(e.target.value)} 
+                onChange={e => onChangeTelefone(e.target.value)}
                 disabled={loading}
                 required
             />
             <input
                 placeholder="Endereco"
                 value={endereco}
-                onChange={e => onChangeEndereco(e.target.value)} 
+                onChange={e => onChangeEndereco(e.target.value)}
                 disabled={loading}
                 required
             />
@@ -45,7 +45,7 @@ export default function UserForm({ nome, cnpj, telefone, endereco, email, nomeCo
                 required
             />
             {/* se editingFornecedorId for true o texto do botão sera "Update User" se não será "Add User" */}
-            <button type="submit" disabled={loading}>{editingFornecedorId ? "Update User" : "Add User"}</button>
+            <button type="submit" disabled={loading}>{editingFornecedorId ? "Update Fornecedor" : "Add Fornecedor"}</button>
             {/* se editingFornecedorId for verdadeiro então exibe o botão de cancel */}
             {editingFornecedorId && (
                 <button

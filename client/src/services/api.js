@@ -36,7 +36,7 @@ export function updateFornecedor(editingUserId, userData) {
 }
 
 export function deleteFornecedor(fornecedorId) {
-    return fetch(`/api/fornecedores/${fornecedorId}`, { //chama o backend para deletar o usuário
+    return fetch(`/api/fornecedores/${fornecedorId}`, {
         method: 'DELETE'
     })
         .then(handleResponse)
