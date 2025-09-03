@@ -8,13 +8,13 @@ async function handleResponse(response) {
 }
 
 //centralizando a comunicação com o back/ realiza todas as requisições
-export function getUsers() {
-    return fetch('/api/users')
+export function getFornecedores() {
+    return fetch('/api/fornecedores')
         .then(handleResponse)
 }
 
-export function createUser(userData) {
-    return fetch('/api/users', {
+export function createFornecedor(userData) {
+    return fetch('/api/fornecedores', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -24,8 +24,8 @@ export function createUser(userData) {
         .then(handleResponse)
 }
 
-export function updateUser(editingUserId, userData) {
-    return fetch(`/api/users/${editingUserId}`, {
+export function updateFornecedor(editingUserId, userData) {
+    return fetch(`/api/fornecedores/${editingUserId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -35,8 +35,8 @@ export function updateUser(editingUserId, userData) {
         .then(handleResponse)
 }
 
-export function deleteUser(userId) {
-    return fetch(`/api/users/${userId}`, { //chama o backend para deletar o usuário
+export function deleteFornecedor(fornecedorId) {
+    return fetch(`/api/fornecedores/${fornecedorId}`, { //chama o backend para deletar o usuário
         method: 'DELETE'
     })
         .then(handleResponse)

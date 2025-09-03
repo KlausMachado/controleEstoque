@@ -1,3 +1,4 @@
+**em construção**
 # controleEstoque
 * O usuário abre a página. O **UserList.jsx** é carregado e o useEffect dispara a busca por usuários, chamando a função **getUsers()** em **api.js**.
 

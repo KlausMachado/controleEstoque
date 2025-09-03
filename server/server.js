@@ -1,15 +1,16 @@
 const express = require('express');
 const cors = require('cors'); //permite a comunicação entre back e front
-const e = require('express');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+let nextId = 3
+
 let fornecedores = [
-    { id: 1, name: 'Alice', cnpj: '00.000.000/0000-00', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', telefone: '(00)00000-0000', email: 'alice@email.com', nomeContatoPrincipal: 'Alice' },
-    { id: 2, name: 'Bob', cnpj: '00.000.000/0000-00', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', telefone: '(00)00000-0000', email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
+    { id: 1, nome: 'Alice', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000',  email: 'alice@email.com', nomeContatoPrincipal: 'Alice' },
+    { id: 2, nome: 'Bob', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000',  email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
 ];
 
 //list all fornecedores
@@ -19,11 +20,11 @@ app.get('/api/fornecedores', (req, res) => {
 
 //create new fornecedor
 app.post('/api/fornecedores', (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !cnpj || telefone || !endereco || !email || !nomeContatoPrincipal) {
+    const { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal } = req.body;
+    if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
         return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
     }
-    const newFornecedor = { id: fornecedor.length + 1, name, cnpj, telefone, endereço, email, nomeContatoPrincipal };
+    const newFornecedor = { id: nextId++, nome, cnpj, telefone, endereco, email, nomeContatoPrincipal };
     fornecedores.push(newFornecedor);
     res.status(201).json(newFornecedor);
 });
@@ -31,20 +32,23 @@ app.post('/api/fornecedores', (req, res) => {
 //update fornecedor
 app.put('/api/fornecedores/:id', (req, res) => {
     const { id } = req.params;
-    const { name, cnpj, endereco, telefone, email, nomeContatoPrincipal } = req.body;
+    const { nome, cnpj, endereco, telefone, email, nomeContatoPrincipal } = req.body;
     const fornecedor = fornecedores.find(fornecedor => fornecedor.id == id);
 
 
     if (!fornecedor) {
-        return res.status(404).json({ error: 'Fonecedor não encontrado' });
-    } else if (!name) {
-        return res.status(400).json({ error: 'Nome é obrigatorio' });
-    } else if (!email) {
-        return res.status(400).json({ error: 'Email é obrigatorio' });
+        return res.status(404).json({ error: 'Fornecedor não encontrado' });
+    } 
+    if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
-    if (name) { fornecedor.name = name }
+
+    if (nome) { fornecedor.nome = nome }
     if (cnpj) { fornecedor.cnpj = cnpj }
+    if (telefone) { fornecedor.telefone = telefone; }
+    if (endereco) { fornecedor.endereco = endereco; }
     if (email) { fornecedor.email = email; }
+    if (nomeContatoPrincipal) { fornecedor.nomeContatoPrincipal = nomeContatoPrincipal; }
     res.json(fornecedor)
 })
 
@@ -55,7 +59,7 @@ app.delete('/api/fornecedores/:id', (req, res) => {
     if (fornecedorIndex === -1) {
         return res.status(404).json({ error: 'Fornecedor não encontrado' });
     }
-    const deletedFornecedor = fornecedor.splice(fornecedorIndex, 1);
+    const deletedFornecedor = fornecedores.splice(fornecedorIndex, 1);
     res.json(deletedFornecedor[0]);
 });
 
