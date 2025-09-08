@@ -1,28 +1,21 @@
 const express = require('express');
 const cors = require('cors'); //permite a comunicação entre back e front
-const supplierController = require("./src/controllers/suppliesController")
-const productsController = require("./src/controllers/productsController")
-
+const suppliesController = require('./src/controllers/suppliesController');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-//FORNECEDORES
 //list all fornecedores
-app.get('/api/fornecedores', supplierController.getAll);
+app.get('/api/fornecedores', suppliesController.getAll);
 //create new fornecedor
-app.post('/api/fornecedores', supplierController.createNewSupplier);
+app.post('/api/fornecedores', suppliesController.createSupplier);
 //update fornecedor
-app.put('/api/fornecedores/:id', supplierController.updateSupplier)
+app.put('/api/fornecedores/:id', suppliesController.updateSupplier);
 //delete fornecedor
-app.delete('/api/fornecedores/:id', supplierController.deleteSupplier);
+app.delete('/api/fornecedores/:id', suppliesController.deleteSupplier);
 
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
     console.log(`API is running on  http://localhost:${PORT}`);
 });
-
-//PRODUTOS:
-//list all produtos
-app.get('/api/produtos', productsController.getAll);

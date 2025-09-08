@@ -1,16 +1,16 @@
 let nextId = 3
 
 let fornecedores = [
-    { id: 1, nome: 'Fornecedor 1', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'fornecedor1@email.com', nomeContatoPrincipal: 'Alice' },
-    { id: 2, nome: 'Fornecedor 2', cnpj: '00.000.000/0000-01', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'fornecedor2@email.com', nomeContatoPrincipal: 'Bob' },
+    { id: 1, nome: 'Alice', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'alice@email.com', nomeContatoPrincipal: 'Alice' },
+    { id: 2, nome: 'Bob', cnpj: '00.000.000/0000-01', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
 ];
 
-export default class SuppliesController {
+export default class SuppliesController{
     getAll(req, res) {
         res.json(fornecedores);
     }
 
-    createNewSupplier(req, res) {
+    createSupplier(req, res) {
         const { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal } = req.body;
 
         if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
@@ -31,6 +31,7 @@ export default class SuppliesController {
         const { id } = req.params;
         const { nome, cnpj, endereco, telefone, email, nomeContatoPrincipal } = req.body;
         const fornecedor = fornecedores.find(fornecedor => fornecedor.id == id);
+
 
         if (!fornecedor) {
             return res.status(404).json({ error: 'Fornecedor não encontrado' });
@@ -57,5 +58,4 @@ export default class SuppliesController {
         const deletedFornecedor = fornecedores.splice(fornecedorIndex, 1);
         res.json(deletedFornecedor[0]);
     }
-
-} 
+}
