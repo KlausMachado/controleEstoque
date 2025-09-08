@@ -10,7 +10,7 @@ let nextId = 3
 
 let fornecedores = [
     { id: 1, nome: 'Alice', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'alice@email.com', nomeContatoPrincipal: 'Alice' },
-    { id: 2, nome: 'Bob', cnpj: '00.000.000/0000-00', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
+    { id: 2, nome: 'Bob', cnpj: '00.000.000/0000-01', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'bob@email.com', nomeContatoPrincipal: 'Bob' },
 ];
 
 //list all fornecedores
@@ -21,9 +21,16 @@ app.get('/api/fornecedores', (req, res) => {
 //create new fornecedor
 app.post('/api/fornecedores', (req, res) => {
     const { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal } = req.body;
+
     if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
         return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
     }
+
+    const cnpjExiste = fornecedores.find(fornecedor => fornecedor.cnpj === cnpj);
+    if (cnpjExiste) {
+        return res.status(409).json({error: 'CNPJ já foi cadastrado na lista'})
+    }
+
     const newFornecedor = { id: nextId++, nome, cnpj, telefone, endereco, email, nomeContatoPrincipal };
     fornecedores.push(newFornecedor);
     res.status(201).json(newFornecedor);
