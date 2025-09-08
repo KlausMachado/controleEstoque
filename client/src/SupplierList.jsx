@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import UserForm from "./UserForm";
+import UserForm from "./SupplierForm";
 import { getFornecedores, updateFornecedor, createFornecedor, deleteFornecedor } from "./services/api";
 
 export default function UserList() {
