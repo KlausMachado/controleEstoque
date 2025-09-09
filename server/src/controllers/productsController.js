@@ -10,20 +10,53 @@ export default class ProductsController {
         res.json(produtos)
     }
 
-    createNewSupplier(req, res) {
+    createNewProduct(req, res) {
         const { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
 
-        if (!nome || !codigoBarras || !descricao || !quantidade || !categoria || !dataValidade, imagem, fornecedorId) {
+        if (!nome || !codigoBarras || !descricao || !quantidade || !categoria || !dataValidade || !imagem || !fornecedorId) {
             return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
         }
 
-        const codigoBarrasExiste = fornecedores.find(fornecedor => fornecedor.codigoBarras === codigoBarras);
+        const codigoBarrasExiste = produtos.find(produto => produto.codigoBarras === codigoBarras);
         if (codigoBarrasExiste) {
             return res.status(409).json({error: 'codigoBarras já foi cadastrado na lista'})
         }
 
-        const newFornecedor = { id: nextId++, nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId };
-        fornecedores.push(newFornecedor);
-        res.status(201).json(newFornecedor);
+        const newProduto = { id: nextCodigo++, nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId };
+        produtos.push(newProduto);
+        res.status(201).json(newProduto);
+    }
+
+    updateProduct(req, res) {
+        const { id } = req.params;
+        const { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
+        const produto = produtos.find(produto => produto.id == id);
+
+        if (!produto) {
+            return res.status(404).json({ error: 'produto não encontrado' });
+        }
+        if (!nome || !codigoBarras || !quantidade || !descricao || !categoria || !dataValidade || !imagem || !fornecedorId) {
+            return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+        }
+
+        if (nome) { produto.nome = nome }
+        if (codigoBarras) { produto.codigoBarras = codigoBarras }
+        if (quantidade) { produto.quantidade = quantidade; }
+        if (descricao) { produto.descricao = descricao; }
+        if (categoria) { produto.categoria = categoria; }
+        if (dataValidade) { produto.dataValidade = dataValidade; }
+        if (imagem) { produto.imagem = imagem; }
+        if (fornecedorId) { produto.fornecedorId = fornecedorId; }
+        res.json(produto)
+    }
+
+    deleteProduto(req, res) {
+        const { id } = req.params;
+        const produtoIndex = produtos.findIndex(produto => produto.id == id);
+        if (produtoIndex === -1) {
+            return res.status(404).json({ error: 'Produto não encontrado' });
+        }
+        const deletedProduto = produtos.splice(produtoIndex, 1);
+        res.json(deletedProduto[0]);
     }
 }

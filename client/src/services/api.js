@@ -7,7 +7,7 @@ async function handleResponse(response) {
     return response.json() //se a resposta for ok, retorna a responsta em formato JSON
 }
 
-//centralizando a comunicação com o back/ realiza todas as requisições
+//centralizando a comunicação com o back/ realiza todas as requisições de fornecedor
 export function getFornecedores() {
     return fetch('/api/fornecedores')
         .then(handleResponse)

@@ -18,11 +18,13 @@ app.put('/api/fornecedores/:id', supplierController.updateSupplier)
 //delete fornecedor
 app.delete('/api/fornecedores/:id', supplierController.deleteSupplier);
 
+//PRODUTOS
+app.get('/api/produtos', productsController.getAll);
+app.post('/api/produtos', productsController.createNewProduct);
+app.put('/api/produtos/:id', productsController.updateProduct)
+app.delete('/api/produtos/:id', productsController.deleteProduct);
+
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
     console.log(`API is running on  http://localhost:${PORT}`);
 });
-
-//PRODUTOS:
-//list all produtos
-app.get('/api/produtos', productsController.getAll);
