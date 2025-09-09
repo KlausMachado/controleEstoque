@@ -2,7 +2,7 @@ async function handleResponse(response) {
     if (!response.ok) {
         //se a resposta não for ok, lança um erro com a mensagem vinda do backend
         const errorData = await response.json()
-        throw new Error(errorData.message || 'Erro ao efetuar ação')
+        throw new Error(errorData.error || 'Erro ao efetuar ação')
     }
     return response.json() //se a resposta for ok, retorna a responsta em formato JSON
 }
@@ -43,12 +43,12 @@ export function deleteFornecedor(fornecedorId) {
 }
 
 //centralizando a comunicação com o back de produtos
-export function getFornecedores() {
+export function getProducts() {
     return fetch('/api/produtos')
         .then(handleResponse)
 }
 
-export function createFornecedor(productData) {
+export function createProduct(productData) {
     return fetch('/api/produtos', {
         method: 'POST',
         headers: {
@@ -59,7 +59,7 @@ export function createFornecedor(productData) {
         .then(handleResponse)
 }
 
-export function updateFornecedor(editingProductCod, productData) {
+export function updateProduct(editingProductCod, productData) {
     return fetch(`/api/produtos/${editingProductCod}`, {
         method: 'PUT',
         headers: {
@@ -70,7 +70,7 @@ export function updateFornecedor(editingProductCod, productData) {
         .then(handleResponse)
 }
 
-export function deleteFornecedor(codigoBarras) {
+export function deleteProduct(codigoBarras) {
     return fetch(`/api/produtos/${codigoBarras}`, {
         method: 'DELETE'
     })
