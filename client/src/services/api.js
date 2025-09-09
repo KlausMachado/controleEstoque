@@ -13,30 +13,65 @@ export function getFornecedores() {
         .then(handleResponse)
 }
 
-export function createFornecedor(userData) {
+export function createFornecedor(supplierData) {
     return fetch('/api/fornecedores', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(supplierData)
     })
         .then(handleResponse)
 }
 
-export function updateFornecedor(editingUserId, userData) {
-    return fetch(`/api/fornecedores/${editingUserId}`, {
+export function updateFornecedor(editingSupplierId, supplierData) {
+    return fetch(`/api/fornecedores/${editingSupplierId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(supplierData)
     })
         .then(handleResponse)
 }
 
 export function deleteFornecedor(fornecedorId) {
     return fetch(`/api/fornecedores/${fornecedorId}`, {
+        method: 'DELETE'
+    })
+        .then(handleResponse)
+}
+
+//centralizando a comunicação com o back de produtos
+export function getFornecedores() {
+    return fetch('/api/produtos')
+        .then(handleResponse)
+}
+
+export function createFornecedor(productData) {
+    return fetch('/api/produtos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+        .then(handleResponse)
+}
+
+export function updateFornecedor(editingProductCod, productData) {
+    return fetch(`/api/produtos/${editingProductCod}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+        .then(handleResponse)
+}
+
+export function deleteFornecedor(codigoBarras) {
+    return fetch(`/api/produtos/${codigoBarras}`, {
         method: 'DELETE'
     })
         .then(handleResponse)

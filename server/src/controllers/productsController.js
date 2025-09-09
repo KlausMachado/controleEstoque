@@ -1,5 +1,3 @@
-let nextCodigo = 3
-
 let produtos = [
     { nome: "Produto 1", codigoBarras: "1", descricao: "produto numero 1", quantidade: "1", categoria: "categoria 1", dataValidade: "01/01/2031", imagem: "imagem do produto", fornecedorId: "1"},
     { nome: "Produto 2", codigoBarras: "2", descricao: "produto numero 2", quantidade: "2", categoria: "categoria 2", dataValidade: "02/02/2032", imagem: "imagem do produto", fornecedorId: "2"}
@@ -28,19 +26,15 @@ export default class ProductsController {
     }
 
     updateProduct(req, res) {
-        const { id } = req.params;
-        const { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
-        const produto = produtos.find(produto => produto.id == id);
+        const { codigoBarras } = req.params;
+        const { nome, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
+        const produto = produtos.find(produto => produto.codigoBarras == codigoBarras);
 
         if (!produto) {
             return res.status(404).json({ error: 'produto não encontrado' });
         }
-        if (!nome || !codigoBarras || !quantidade || !descricao || !categoria || !dataValidade || !imagem || !fornecedorId) {
-            return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
-        }
 
         if (nome) { produto.nome = nome }
-        if (codigoBarras) { produto.codigoBarras = codigoBarras }
         if (quantidade) { produto.quantidade = quantidade; }
         if (descricao) { produto.descricao = descricao; }
         if (categoria) { produto.categoria = categoria; }
@@ -51,8 +45,8 @@ export default class ProductsController {
     }
 
     deleteProduto(req, res) {
-        const { id } = req.params;
-        const produtoIndex = produtos.findIndex(produto => produto.id == id);
+        const { codigoBarras } = req.params;
+        const produtoIndex = produtos.findIndex(produto => produto.codigoBarras == codigoBarras);
         if (produtoIndex === -1) {
             return res.status(404).json({ error: 'Produto não encontrado' });
         }
