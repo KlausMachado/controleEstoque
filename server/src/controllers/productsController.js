@@ -3,7 +3,7 @@ let produtos = [
     { nome: "Produto 2", codigoBarras: "2", descricao: "produto numero 2", quantidade: "2", categoria: "categoria 2", dataValidade: "02/02/2032", imagem: "imagem do produto", fornecedorId: "2"}
 ]
 
-export default class ProductsController {
+class ProductsController {
     getAll(req, res) {
         res.json(produtos)
     }
@@ -44,7 +44,7 @@ export default class ProductsController {
         res.json(produto)
     }
 
-    deleteProduto(req, res) {
+    deleteProduct(req, res) {
         const { codigoBarras } = req.params;
         const produtoIndex = produtos.findIndex(produto => produto.codigoBarras == codigoBarras);
         if (produtoIndex === -1) {
@@ -54,3 +54,6 @@ export default class ProductsController {
         res.json(deletedProduto[0]);
     }
 }
+
+const productsController = new ProductsController();
+module.exports = productsController;

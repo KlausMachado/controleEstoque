@@ -5,7 +5,7 @@ let fornecedores = [
     { id: 2, nome: 'Fornecedor 2', cnpj: '00.000.000/0000-01', telefone: '(00)00000-0000', endereco: 'Rua teste, n°0, Cidade/UF, CEP:00.000.000', email: 'fornecedor2@email.com', nomeContatoPrincipal: 'Bob' },
 ];
 
-export default class SuppliesController {
+class SuppliesController {
     getAll(req, res) {
         res.json(fornecedores);
     }
@@ -59,3 +59,7 @@ export default class SuppliesController {
     }
 
 } 
+
+const suppliesController = new SuppliesController();
+
+module.exports = suppliesController;
