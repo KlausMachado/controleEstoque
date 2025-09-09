@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import UserForm from "./SupplierForm";
+import SupplierForm from "./SupplierForm";
 import { getFornecedores, updateFornecedor, createFornecedor, deleteFornecedor } from "./services/api";
 
-export default function UserList() {
+export default function SupplierList() {
     const [fornecedores, setFornecedores] = useState([])
     const [nome, setNome] = useState('')
     const [cnpj, setCnpj] = useState('')
@@ -115,7 +115,7 @@ export default function UserList() {
         <div style={{ marginTop: 24 }}>
             <h2>Fornecedores</h2>
 
-            <UserForm //passando os valores das props que serão usadas em UserForm
+            <SupplierForm 
                 nome={nome}
                 cnpj={cnpj}
                 telefone={telefone}

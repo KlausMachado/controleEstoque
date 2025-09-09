@@ -1,4 +1,4 @@
-export default function UserForm({ nome, cnpj, telefone, endereco, email, nomeContatoPrincipal, editingFornecedorId, loading, onChangeName, onChangeCnpj, onChangeTelefone, onChangeEndereco, onChangeEmail, onChangeNomeContato, onSubmit, onCancel }) {
+export default function SupplierForm({ nome, cnpj, telefone, endereco, email, nomeContatoPrincipal, editingFornecedorId, loading, onChangeName, onChangeCnpj, onChangeTelefone, onChangeEndereco, onChangeEmail, onChangeNomeContato, onSubmit, onCancel }) {
     return (
         <form onSubmit={onSubmit} style={{ marginBottom: 16 }}>
             <input
