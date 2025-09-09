@@ -1,4 +1,3 @@
-//exibe formlario e botões, as informações vem de UserList.jsx
 export default function UserForm({ nome, cnpj, telefone, endereco, email, nomeContatoPrincipal, editingFornecedorId, loading, onChangeName, onChangeCnpj, onChangeTelefone, onChangeEndereco, onChangeEmail, onChangeNomeContato, onSubmit, onCancel }) {
     return (
         <form onSubmit={onSubmit} style={{ marginBottom: 16 }}>

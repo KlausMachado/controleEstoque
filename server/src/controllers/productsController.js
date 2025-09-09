@@ -20,7 +20,7 @@ export default class ProductsController {
             return res.status(409).json({error: 'codigoBarras já foi cadastrado na lista'})
         }
 
-        const newProduto = { id: nextCodigo++, nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId };
+        const newProduto = { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId };
         produtos.push(newProduto);
         res.status(201).json(newProduto);
     }
