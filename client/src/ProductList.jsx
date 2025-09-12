@@ -50,10 +50,19 @@ export default function ProductList() {
             setLoading(true)
             setError(null)
             setSuccess(null)
-            updateProduct(editingCodigoBarras, { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId })
+            const dataToUpdate = {
+                codigoBarras,
+                nome,
+                descricao,
+                quantidade,
+                categoria,
+                dataValidade,
+                imagem,
+                fornecedorId
+            };
+            updateProduct(editingCodigoBarras, dataToUpdate)
                 .then(updateProduct => {
-                    setProdutos(currentProduct => currentProduct.map(produto => produto.codigoBarras === updateProduct.codigoBarras ? updateProduct : produto))
-                    resetForm()
+                    setProdutos(currentProduct => currentProduct.map(produto => produto.codigoBarras === updateProduct.codigoBarras ? updateProduct : produto))                  
                     setError(null)
                     setSuccess('Produto editado com sucesso!')
                 })
@@ -66,7 +75,7 @@ export default function ProductList() {
             setLoading(true)
             setError(null)
             setSuccess(null)
-            createProduct({ nome, codigoBarras, descricao, quantidade, dataValidade, imagem, fornecedorId })
+            createProduct({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId })
                 .then(createProduct => {
                     setProdutos(currentProduct => [...currentProduct, createProduct])
                     resetForm()

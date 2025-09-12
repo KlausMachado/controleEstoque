@@ -27,16 +27,22 @@ class ProductsController {
 
     updateProduct(req, res) {
         const { codigoBarras } = req.params;
+        console.log(codigoBarras)
         const { nome, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
         const produto = produtos.find(produto => produto.codigoBarras == codigoBarras);
 
+        console.log('rota PUT api/produtos chamada')
+        console.log('antes do if:', req.body)
+        
         if (!produto) {
             return res.status(404).json({ error: 'produto não encontrado' });
         }
 
+        console.log('depois do if:', req.body)
+
         if (nome) { produto.nome = nome }
-        if (quantidade) { produto.quantidade = quantidade; }
         if (descricao) { produto.descricao = descricao; }
+        if (quantidade) { produto.quantidade = quantidade; } 
         if (categoria) { produto.categoria = categoria; }
         if (dataValidade) { produto.dataValidade = dataValidade; }
         if (imagem) { produto.imagem = imagem; }

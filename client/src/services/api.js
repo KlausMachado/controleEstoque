@@ -45,7 +45,7 @@ export function deleteFornecedor(fornecedorId) {
 //centralizando a comunicação com o back de produtos
 export function getProducts() {
     return fetch('/api/produtos')
-        .then(handleResponse)
+            .then(handleResponse)
 }
 
 export function createProduct(productData) {
@@ -59,8 +59,8 @@ export function createProduct(productData) {
         .then(handleResponse)
 }
 
-export function updateProduct(editingProductCod, productData) {
-    return fetch(`/api/produtos/${editingProductCod}`, {
+export function updateProduct(codigoBarras, productData) {
+    return fetch(`/api/produtos/${codigoBarras}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
