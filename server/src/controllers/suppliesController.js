@@ -1,3 +1,5 @@
+const validator = require('validator')
+
 let nextId = 3
 
 let fornecedores = [
@@ -17,6 +19,13 @@ class SuppliesController {
             return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
         }
 
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: 'E-mail inválido.' });
+        }
+        if (!validator.isMobilePhone(telefone, 'pt-BR')) {
+            return res.status(400).json({ error: 'Número de telefone inválido.' });
+        }
+
         const cnpjExiste = fornecedores.find(fornecedor => fornecedor.cnpj === cnpj);
         if (cnpjExiste) {
             return res.status(409).json({error: 'CNPJ já foi cadastrado na lista'})
@@ -30,6 +39,7 @@ class SuppliesController {
     updateSupplier(req, res) {
         const { id } = req.params;
         const { nome, cnpj, endereco, telefone, email, nomeContatoPrincipal } = req.body;
+
         const fornecedor = fornecedores.find(fornecedor => fornecedor.id == id);
 
         if (!fornecedor) {
@@ -37,6 +47,12 @@ class SuppliesController {
         }
         if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
             return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+        }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: 'E-mail inválido.' });
+        }
+        if (!validator.isMobilePhone(telefone, 'pt-BR')) {
+            return res.status(400).json({ error: 'Número de telefone inválido.' });
         }
 
         if (nome) { fornecedor.nome = nome }

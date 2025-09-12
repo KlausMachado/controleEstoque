@@ -46,7 +46,7 @@ export default function ProductList() {
     //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
-        if (isNaN(quantidade) || quantidade <= 0) {
+        if (isNaN(quantidade) || parseInt(quantidade, 10) <= 0) {
             setError('A quantidade deve ser um número inteiro positivo.');
             return;
         }

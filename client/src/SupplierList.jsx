@@ -1,3 +1,4 @@
+import { validateEmail, validatePhone } from "./validators/validators";
 import { useEffect, useState } from "react";
 import SupplierForm from "./SupplierForm";
 import { getFornecedores, updateFornecedor, createFornecedor, deleteFornecedor } from "./services/api";
@@ -32,6 +33,14 @@ export default function SupplierList() {
     //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
+        if(!validateEmail(email)) {
+            setError('Por favor, insira um endereço de e-mail válido.')
+            return
+        }
+        if(!validatePhone(telefone)){
+            setError('Por favor, insira um telefone válido')
+            return
+        }
         if (editingFornecedorId) { //se estiver editando um usuário
             setLoading(true)
             updateFornecedor(editingFornecedorId, { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal })
