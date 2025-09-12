@@ -17,12 +17,10 @@ class ProductsController {
         }
 
         if (isNaN(quantidade) || parseInt(quantidade, 10) <= 0) {
-            setError('A quantidade deve ser um número inteiro positivo.');
-            return;
+            return res.status(400).json({ error: 'A quantidade deve ser um número inteiro positivo.' });
         }
         if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataValidade)) {
-            setError('A data de validade deve estar no formato DD/MM/AAAA.');
-            return; 
+            return res.status(400).json({error: 'Digite um email valido'})
         }
 
         const codigoBarrasExiste = produtos.find(produto => produto.codigoBarras === codigoBarras);
@@ -40,12 +38,11 @@ class ProductsController {
         const { nome, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
         
         if (isNaN(quantidade) || parseInt(quantidade, 10) <= 0) {
-            setError('A quantidade deve ser um número inteiro positivo.');
-            return;
+            return res.status(400).json({ error: 'A quantidade deve ser um número inteiro positivo.' });
+    
         }
         if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataValidade)) {
-            setError('A data de validade deve estar no formato DD/MM/AAAA.');
-            return; 
+           return res.status(400).json({error: 'Digite um email valido'})
         }
 
         const produto = produtos.find(produto => produto.codigoBarras == codigoBarras);

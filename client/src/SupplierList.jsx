@@ -16,7 +16,6 @@ export default function SupplierList() {
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false)
 
-    //busca a lista de usuários ao carregar o componente 
     useEffect(() => {
         setLoading(true)
         getFornecedores()
@@ -30,7 +29,6 @@ export default function SupplierList() {
             .finally(() => setLoading(false))
     }, [])
 
-    //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
         if(!validateEmail(email)) {
@@ -41,7 +39,7 @@ export default function SupplierList() {
             setError('Por favor, insira um telefone válido')
             return
         }
-        if (editingFornecedorId) { //se estiver editando um usuário
+        if (editingFornecedorId) { 
             setLoading(true)
             updateFornecedor(editingFornecedorId, { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal })
                 .then(updatedFornecedor => {
@@ -54,7 +52,7 @@ export default function SupplierList() {
                     setNomeContatoPrincipal('')
                     setError(null)
                     setEditingFornecedorId(null)
-                    setSuccess('Usuário editado com sucesso!')
+                    setSuccess('Fornecedor editado com sucesso!')
                 })
                 .catch(err => {
                     setError(err.message)
@@ -66,7 +64,7 @@ export default function SupplierList() {
                     setNomeContatoPrincipal('')
                 })
                 .finally(() => setLoading(false))
-        } else { //se estiver criando um novo usuário
+        } else { 
             setLoading(true)
             createFornecedor({ nome, cnpj, telefone, endereco, email, nomeContatoPrincipal })
                 .then(newFornecedor => {
@@ -78,7 +76,7 @@ export default function SupplierList() {
                     setEmail('')
                     setNomeContatoPrincipal('')
                     setError(null)
-                    setSuccess('Usuário adicionado com sucesso!')
+                    setSuccess('Fornecedor adicionado com sucesso!')
                 }
                 )
                 .catch(err => {
@@ -94,7 +92,6 @@ export default function SupplierList() {
         }
 
     }
-    //função para editar um usuário disparada ai clicar no botão Edit
     function handleEdit(fornecedor) {
         setNome(fornecedor.nome)
         setCnpj(fornecedor.cnpj)
@@ -105,14 +102,13 @@ export default function SupplierList() {
         setEditingFornecedorId(fornecedor.id)
     }
 
-    //deletar usuário
     function handleDelete(fornecedorId) {
         setLoading(true)
         deleteFornecedor(fornecedorId)
             .then(() => {
                 setFornecedores(currentFornecedor => currentFornecedor.filter(fornecedor => fornecedor.id !== fornecedorId))
                 setError(null)
-                setSuccess('Usuário deletado com sucesso!')
+                setSuccess('Fornecedor deletado com sucesso!')
             })
             .catch(err => {
                 setError(err.message)

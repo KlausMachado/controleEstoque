@@ -29,7 +29,6 @@ export default function ProductList() {
         setEditingCodigoBarras(null)
     }
 
-    //busca a lista de usuários ao carregar o componente 
     useEffect(() => {
         setLoading(true)
         getProducts()
@@ -38,12 +37,11 @@ export default function ProductList() {
                 setError(null)
             })
             .catch(err => {
-                setError(err.message)
+                setError(err.error)
             })
             .finally(() => setLoading(false))
     }, [])
 
-    //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
         if (isNaN(quantidade) || parseInt(quantidade, 10) <= 0) {
@@ -55,7 +53,7 @@ export default function ProductList() {
             setError('A data de validade deve estar no formato DD/MM/AAAA.');
             return; 
         }
-        if (editingCodigoBarras) { //se estiver editando um usuário
+        if (editingCodigoBarras) { 
             setLoading(true)
             setError(null)
             setSuccess(null)
@@ -77,11 +75,11 @@ export default function ProductList() {
                     resetForm()
                 })
                 .catch(err => {
-                    setError(err.message)
+                    setError(err.error)
                     resetForm()
                 })
                 .finally(() => setLoading(false))
-        } else { //se estiver criando um novo usuário
+        } else { 
             setLoading(true)
             setError(null)
             setSuccess(null)
@@ -94,14 +92,13 @@ export default function ProductList() {
                 }
                 )
                 .catch(err => {
-                    setError(err.message)
+                    setError(err.error)
                     resetForm()
                 })
                 .finally(() => setLoading(false))
         }
 
     }
-    //função para editar um usuário disparada ai clicar no botão Edit
     function handleEdit(produto) {
         setNome(produto.nome)
         setCodigoBarras(produto.codigoBarras)
@@ -114,7 +111,6 @@ export default function ProductList() {
         setEditingCodigoBarras(produto.codigoBarras)
     }
 
-    //deletar usuário
     function handleDelete(codigoBarras) {
         setLoading(true)
         setError(null)
@@ -126,7 +122,7 @@ export default function ProductList() {
                 setSuccess('Produto deletado com sucesso!')
             })
             .catch(err => {
-                setError(err.message)
+                setError(err.error)
             })
             .finally(() => setLoading(false))
     }
