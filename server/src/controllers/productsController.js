@@ -12,7 +12,7 @@ class ProductsController {
     createNewProduct(req, res) {
         const { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId } = req.body;
 
-        if (!nome || !codigoBarras || !descricao || !quantidade || !categoria || !dataValidade || !imagem || !fornecedorId) {
+        if (!nome || !codigoBarras || !descricao || !quantidade || !categoria || !dataValidade || !fornecedorId) {
             return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
         }
 

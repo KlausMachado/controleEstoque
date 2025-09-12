@@ -48,7 +48,6 @@ export default function ProductForm({ nome, codigoBarras, descricao, quantidade,
                 value={imagem}
                 onChange={e => onChangeImage(e.target.value)}
                 disabled={loading}
-                required
             />
             <input
                 placeholder="Fornecedor Id"
