@@ -22,7 +22,7 @@ app.delete('/api/fornecedores/:id', supplierController.deleteSupplier);
 app.get('/api/produtos', productsController.getAll);
 app.post('/api/produtos', productsController.createNewProduct);
 app.put('/api/produtos/:codigoBarras', productsController.updateProduct)
-app.delete('/api/produtos/:id', productsController.deleteProduct);
+app.delete('/api/produtos/:codigoBarras', productsController.deleteProduct);
 
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {

@@ -46,6 +46,15 @@ export default function ProductList() {
     //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
+        if (isNaN(quantidade) || quantidade <= 0) {
+            setError('A quantidade deve ser um número inteiro positivo.');
+            return;
+        }
+        // Validação de formato da data
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataValidade)) {
+            setError('A data de validade deve estar no formato DD/MM/AAAA.');
+            return; 
+        }
         if (editingCodigoBarras) { //se estiver editando um usuário
             setLoading(true)
             setError(null)
@@ -62,9 +71,10 @@ export default function ProductList() {
             };
             updateProduct(editingCodigoBarras, dataToUpdate)
                 .then(updateProduct => {
-                    setProdutos(currentProduct => currentProduct.map(produto => produto.codigoBarras === updateProduct.codigoBarras ? updateProduct : produto))                  
+                    setProdutos(currentProduct => currentProduct.map(produto => produto.codigoBarras === updateProduct.codigoBarras ? updateProduct : produto))
                     setError(null)
                     setSuccess('Produto editado com sucesso!')
+                    resetForm()
                 })
                 .catch(err => {
                     setError(err.message)
@@ -78,7 +88,7 @@ export default function ProductList() {
             createProduct({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId })
                 .then(createProduct => {
                     setProdutos(currentProduct => [...currentProduct, createProduct])
-                    resetForm()
+                                        resetForm()
                     setError(null)
                     setSuccess('Produto adicionado com sucesso!')
                 }

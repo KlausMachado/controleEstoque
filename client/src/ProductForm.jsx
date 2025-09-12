@@ -12,7 +12,7 @@ export default function ProductForm({ nome, codigoBarras, descricao, quantidade,
                 placeholder="Código de Barras"
                 value={codigoBarras}
                 onChange={e => onChangeCodigoBarras(e.target.value)}
-                disabled={loading}
+                disabled={loading || editingCodigoBarras}
                 required
             />
             <input
