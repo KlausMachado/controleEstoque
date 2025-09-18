@@ -16,7 +16,7 @@ export default function ProductForm({ nome, codigoBarras, descricao, quantidade,
                 required
             />
             <input
-                placeholder="descricao"
+                placeholder="Descricao"
                 value={descricao}
                 onChange={e => onChangeDescricao(e.target.value)}
                 disabled={loading}
@@ -57,7 +57,7 @@ export default function ProductForm({ nome, codigoBarras, descricao, quantidade,
                 required
             />
             {/* se editingCodigoBarras for true o texto do botão sera "Update" se não será "Add" */}
-            <button type="submit" disabled={loading}>{editingCodigoBarras ? "Update Fornecedor" : "Add Fornecedor"}</button>
+            <button type="submit" disabled={loading}>{editingCodigoBarras ? "Update Produto" : "Add Produto"}</button>
             {/* se editingCodigoBarras for verdadeiro então exibe o botão de cancel */}
             {editingCodigoBarras && (
                 <button

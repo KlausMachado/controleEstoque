@@ -2,6 +2,7 @@ import { validateEmail, validatePhone } from "./validators/validators";
 import { useEffect, useState } from "react";
 import SupplierForm from "./SupplierForm";
 import { getFornecedores, updateFornecedor, createFornecedor, deleteFornecedor } from "./services/api";
+import { phoneMask } from "./utils/utils";
 
 export default function SupplierList() {
     const [fornecedores, setFornecedores] = useState([])
@@ -35,7 +36,8 @@ export default function SupplierList() {
             setError('Por favor, insira um endereço de e-mail válido.')
             return
         }
-        if(!validatePhone(telefone)){
+        const telefoneMasked = phoneMask(telefone)
+        if(!validatePhone(telefoneMasked)){
             setError('Por favor, insira um telefone válido')
             return
         }

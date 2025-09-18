@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductForm from "./ProductForm";
 import { getProducts, updateProduct, createProduct, deleteProduct } from "./services/api";
+import { dateMask } from "./utils/utils";
 
 export default function ProductList() {
     const [produtos, setProdutos] = useState([])
@@ -49,10 +50,13 @@ export default function ProductList() {
             return;
         }
         // Validação de formato da data
-        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataValidade)) {
+        const dateMasked = dateMask(dataValidade)
+
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateMasked)) {
             setError('A data de validade deve estar no formato DD/MM/AAAA.');
             return; 
         }
+        
         if (editingCodigoBarras) { 
             setLoading(true)
             setError(null)
@@ -63,7 +67,7 @@ export default function ProductList() {
                 descricao,
                 quantidade,
                 categoria,
-                dataValidade,
+                dateMasked,
                 imagem,
                 fornecedorId
             };
