@@ -1,8 +1,7 @@
-import { validateEmail, validatePhone } from "./validators/validators";
+import { validateEmail, validatePhone, formatPhone, cleanPhone } from "./validators/validators";
 import { useEffect, useState } from "react";
 import SupplierForm from "./SupplierForm";
 import { getFornecedores, updateFornecedor, createFornecedor, deleteFornecedor } from "./services/api";
-import { phoneMask } from "./utils/utils";
 
 export default function SupplierList() {
     const [fornecedores, setFornecedores] = useState([])
@@ -17,6 +16,7 @@ export default function SupplierList() {
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false)
 
+    //busca a lista de usuários ao carregar o componente 
     useEffect(() => {
         setLoading(true)
         getFornecedores()
@@ -30,20 +30,23 @@ export default function SupplierList() {
             .finally(() => setLoading(false))
     }, [])
 
+    //função que trata o submit do formulário, tanto para criar quanto para editar um usuário
     function handleSubmit(e) {
         e.preventDefault()
         if(!validateEmail(email)) {
             setError('Por favor, insira um endereço de e-mail válido.')
             return
         }
-        const telefoneMasked = phoneMask(telefone)
-        if(!validatePhone(telefoneMasked)){
-            setError('Por favor, insira um telefone válido')
+        if (!validatePhone(telefone)) {
+            setError('Por favor, insira um numero de telefone válido.')
             return
         }
-        if (editingFornecedorId) { 
+        const telefoneLimpo = cleanPhone(telefone); // apenas números para enviar à API
+        const telefoneFormatado = formatPhone(telefone); // para exibir no campo
+
+        if (editingFornecedorId) { //se estiver editando um usuário
             setLoading(true)
-            updateFornecedor(editingFornecedorId, { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal })
+            updateFornecedor(editingFornecedorId, { nome, cnpj, telefone: telefoneFormatado, endereco, email, nomeContatoPrincipal })
                 .then(updatedFornecedor => {
                     setFornecedores(currentFornecedor => currentFornecedor.map(user => user.id === updatedFornecedor.id ? updatedFornecedor : user))
                     setNome('')
@@ -54,7 +57,7 @@ export default function SupplierList() {
                     setNomeContatoPrincipal('')
                     setError(null)
                     setEditingFornecedorId(null)
-                    setSuccess('Fornecedor editado com sucesso!')
+                    setSuccess('Usuário editado com sucesso!')
                 })
                 .catch(err => {
                     setError(err.message)
@@ -66,9 +69,9 @@ export default function SupplierList() {
                     setNomeContatoPrincipal('')
                 })
                 .finally(() => setLoading(false))
-        } else { 
+        } else { //se estiver criando um novo usuário
             setLoading(true)
-            createFornecedor({ nome, cnpj, telefone, endereco, email, nomeContatoPrincipal })
+            createFornecedor({ nome, cnpj, telefone: telefoneFormatado, endereco, email, nomeContatoPrincipal })
                 .then(newFornecedor => {
                     setFornecedores(currentFornecedor => [...currentFornecedor, newFornecedor])
                     setNome('')
@@ -78,7 +81,7 @@ export default function SupplierList() {
                     setEmail('')
                     setNomeContatoPrincipal('')
                     setError(null)
-                    setSuccess('Fornecedor adicionado com sucesso!')
+                    setSuccess('Usuário adicionado com sucesso!')
                 }
                 )
                 .catch(err => {
@@ -94,6 +97,7 @@ export default function SupplierList() {
         }
 
     }
+    //função para editar um usuário disparada ai clicar no botão Edit
     function handleEdit(fornecedor) {
         setNome(fornecedor.nome)
         setCnpj(fornecedor.cnpj)
@@ -104,13 +108,14 @@ export default function SupplierList() {
         setEditingFornecedorId(fornecedor.id)
     }
 
+    //deletar usuário
     function handleDelete(fornecedorId) {
         setLoading(true)
         deleteFornecedor(fornecedorId)
             .then(() => {
                 setFornecedores(currentFornecedor => currentFornecedor.filter(fornecedor => fornecedor.id !== fornecedorId))
                 setError(null)
-                setSuccess('Fornecedor deletado com sucesso!')
+                setSuccess('Usuário deletado com sucesso!')
             })
             .catch(err => {
                 setError(err.message)

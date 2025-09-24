@@ -15,6 +15,9 @@ class SuppliesController {
     createNewSupplier(req, res) {
         const { nome, cnpj, telefone, endereco, email, nomeContatoPrincipal } = req.body;
 
+        console.log('telefone recebido:', telefone)
+        console.log('Tipo do telefone:', typeof telefone)
+
         if (!nome || !cnpj || !telefone || !endereco || !email || !nomeContatoPrincipal) {
             return res.status(400).json({ error: 'Preencha os dados obrigatorios' });
         }
@@ -22,8 +25,13 @@ class SuppliesController {
         if (!validator.isEmail(email)) {
             return res.status(400).json({ error: 'E-mail inválido.' });
         }
-        if (!validator.isMobilePhone(telefone, 'pt-BR')) {
-            return res.status(400).json({ error: 'Número de telefone inválido.' });
+        const clearPhone = telefone.replace(/\D/g, '')
+        if (clearPhone.length < 10 || clearPhone.length > 11) {     
+            return res.status(400).json({error: 'Telefone deve ter 10 ou 11 digitos.'})
+        }
+        const ddd = clearPhone.substring(0, 2)
+        if (ddd < '11' || ddd > '99') {
+            return res.status(400).json({error: 'DDD invalido'})
         }
 
         const cnpjExiste = fornecedores.find(fornecedor => fornecedor.cnpj === cnpj);
