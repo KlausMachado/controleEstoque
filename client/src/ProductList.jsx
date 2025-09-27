@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import ProductForm from "./ProductForm";
 import { getProducts, updateProduct, createProduct, deleteProduct } from "./services/api";
+import { getFornecedores } from "./services/api";
 import { dateMask } from "./utils/utils";
 
 export default function ProductList() {
     const [produtos, setProdutos] = useState([])
+    const [fornecedores, setFornecedores] = useState([])
     const [nome, setNome] = useState('')
     const [codigoBarras, setCodigoBarras] = useState('')
     const [descricao, setDescricao] = useState('')
@@ -40,6 +42,14 @@ export default function ProductList() {
             .catch(err => {
                 setError(err.error)
             })
+        getFornecedores()
+            .then(data => {
+                setFornecedores(data)
+            })
+            .catch(err => {
+                console.error('Erro ao carregar fornecedores:', err)
+                setError(err.error)
+            })
             .finally(() => setLoading(false))
     }, [])
 
@@ -49,6 +59,13 @@ export default function ProductList() {
             setError('A quantidade deve ser um número inteiro positivo.');
             return;
         }
+
+        //validação de fornecedor selecionado
+        if (!fornecedorId) {
+            setError('Por favor, selecone um fornecedor.')
+            return
+        }
+
         // Validação de formato da data
         const dateMasked = dateMask(dataValidade)
 
@@ -87,14 +104,13 @@ export default function ProductList() {
             setLoading(true)
             setError(null)
             setSuccess(null)
-            createProduct({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId })
+            createProduct({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade: dateMasked, imagem, fornecedorId })
                 .then(createProduct => {
                     setProdutos(currentProduct => [...currentProduct, createProduct])
-                                        resetForm()
+                    resetForm()
                     setError(null)
                     setSuccess('Produto adicionado com sucesso!')
-                }
-                )
+                })
                 .catch(err => {
                     setError(err.error)
                     resetForm()
@@ -144,6 +160,7 @@ export default function ProductList() {
                 dataValidade={dataValidade}
                 imagem={imagem}
                 fornecedorId={fornecedorId}
+                fornecedores={fornecedores}
                 editingCodigoBarras={editingCodigoBarras}
                 loading={loading}
                 onChangeName={setNome}
@@ -167,12 +184,17 @@ export default function ProductList() {
             {success && <p style={{ color: 'green' }}>{success}</p>}
             <h2>Lista de Produtos: </h2>
             <ul>
-                {produtos.map(produto => (
-                    <li key={produto.codigoBarras}> {produto.nome} - {produto.codigoBarras} - {produto.descricao} - {produto.quantidade} - {produto.categoria} - {produto.dataValidade} - {produto.imagem} - {produto.fornecedorId}
-                        <button onClick={() => handleEdit(produto)}>Edit</button>
-                        <button onClick={() => handleDelete(produto.codigoBarras)}>Delete</button>
-                    </li>
-                ))}
+                {produtos.map(produto => {
+                    const fornecedor = fornecedores.find(f => f.id == produto.fornecedorId)
+                    const nomeForncedor = fornecedor ? fornecedor.nome : "Fornecedor não encontrado"
+                    return (
+                        <li key={produto.codigoBarras}> 
+                            {produto.nome} - {produto.codigoBarras} - {produto.descricao} - {produto.quantidade} - {produto.categoria} - {produto.dataValidade} - {produto.imagem} - Fornecedor: {nomeForncedor}
+                            <button onClick={() => handleEdit(produto)}>Edit</button>
+                            <button onClick={() => handleDelete(produto.codigoBarras)}>Delete</button>
+                        </li>
+                    )
+                })}
             </ul>
         </div>
     )
