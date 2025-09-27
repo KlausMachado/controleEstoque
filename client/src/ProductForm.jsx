@@ -1,4 +1,4 @@
-export default function ProductForm({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId, editingCodigoBarras, loading, onChangeName, onChangeCodigoBarras, onChangeDescricao, onChangeQuantidade, onChangeCategoria, onChangeDataValidade, onChangeImage, onChangeFornecedorId, onSubmit, onCancel }) {
+export default function ProductForm({ nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem, fornecedorId, fornecedores, editingCodigoBarras, loading, onChangeName, onChangeCodigoBarras, onChangeDescricao, onChangeQuantidade, onChangeCategoria, onChangeDataValidade, onChangeImage, onChangeFornecedorId, onSubmit, onCancel }) {
     return (
         <form onSubmit={onSubmit} style={{ marginBottom: 16 }}>
             <input
@@ -49,13 +49,20 @@ export default function ProductForm({ nome, codigoBarras, descricao, quantidade,
                 onChange={e => onChangeImage(e.target.value)}
                 disabled={loading}
             />
-            <input
-                placeholder="Fornecedor Id"
+            <select 
                 value={fornecedorId}
                 onChange={e => onChangeFornecedorId(e.target.value)}
                 disabled={loading}
                 required
-            />
+            >
+                <option value="">Selecione um fornecedor</option>
+                {fornecedores.map(fornecedor => (
+                    <option key={fornecedor.id} value={fornecedor.id}>
+                        {fornecedor.nome} (ID: {fornecedor.id})
+                    </option>
+                ))}
+            </select>
+
             {/* se editingCodigoBarras for true o texto do botão sera "Update" se não será "Add" */}
             <button type="submit" disabled={loading}>{editingCodigoBarras ? "Update Produto" : "Add Produto"}</button>
             {/* se editingCodigoBarras for verdadeiro então exibe o botão de cancel */}
